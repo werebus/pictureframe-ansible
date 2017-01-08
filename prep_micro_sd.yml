@@ -1,0 +1,33 @@
+---
+- hosts: local
+  become: true
+
+  vars_prompt:
+    - name: 'sd_device'
+    - prompt: 'Enter device name (e.g. sdc) CAREFUL!'
+
+  tasks:
+    - name: 'Partition device'
+    - name: 'Make boot fs'
+      filesystem:
+        fstype: vfat
+        dev: '/dev/{{sd_device}}1'
+    - name: 'Make root fs'
+      filesystem:
+        fstype: ext4
+        dev: '/dev/{{sd_device}}2'
+    - name: 'Mount boot partition'
+      command: 'mount /dev/{{sd_device}}1 mount/boot'
+    - name: 'Mount root partition'
+      command: 'mount /dev/{{sd_device}}2 mount/root'
+    - name: 'Extract root fs'
+      unarchive:
+        src: 'http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz'
+        dest: mount/root
+        remote_src: true
+    - name: 'Move boot files'
+      command: 'mv mount/root/boot/* mount/boot'
+    - name: 'Unmount boot partition'
+      command: 'umount mount/boot'
+    - name: 'Unmount root partition'
+      command: 'umount mount/root'

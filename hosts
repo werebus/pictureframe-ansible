@@ -1,0 +1,6 @@
+[local]
+localhost ansible_connection=local
+
+[frames]
+#frame.werebus
+192.168.33.138
