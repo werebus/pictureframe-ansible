@@ -1,0 +1,18 @@
+- include_vars: 'wifi_password.yml'
+- name: 'wpa supplicant'
+  pacman:
+    name: wpa_supplicant
+- name: 'wpa_supplicant config'
+  template:
+    src: templates/wpa_supplicant.conf.j2
+    dest: "/etc/wpa_supplicant/wpa_supplicant-{{wl_interface}}.conf"
+- name: 'wpa service'
+  systemd:
+    unit: 'wpa_supplicant@{{wl_interface}}'
+    enabled: yes
+    state: started
+- name: 'dhcp service'
+  systemd:
+    unit: 'dhcpcd@{{wl_interface}}'
+    enabled: yes
+    state: started

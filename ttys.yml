@@ -1,0 +1,16 @@
+- name: 'disable tty1'
+  file:
+    path: /etc/systemd/system/getty.target.wants/getty@tty1.service
+    state: absent
+- name: 'no auto ttys'
+  lineinfile:
+    dest: /etc/systemd/logind.conf
+    state: present
+    regexp: '^#?NAutoVTs='
+    line: 'NAutoVTs=0'
+- name: 'reserve tty6'
+  lineinfile:
+    dest: /etc/systemd/logind.conf
+    state: present
+    regexp: '^#?ReserveVT='
+    line: 'ReserveVT=6'
