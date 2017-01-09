@@ -1,0 +1,44 @@
+---
+- hosts: frames
+  remote_user: '{{ admin_user }}'
+  become: yes
+
+  tasks:
+    - name: 'remove alarm user'
+      user:
+        name: alarm
+        state: absent
+        remove: yes
+    - name: 'lock root user'
+      user:
+        name: root
+        expires: 1
+    - name: 'disable tty1'
+      file:
+        path: /etc/systemd/system/getty.target.wants/getty@tty1.service
+        state: absent
+    - name: 'no auto ttys'
+      lineinfile:
+        dest: /etc/systemd/logind.conf
+        state: present
+        regexp: '^#?NAutoVTs='
+        line: 'NAutoVTs=0'
+    - name: 'reserve tty6'
+      lineinfile:
+        dest: /etc/systemd/logind.conf
+        state: present
+        regexp: '^#?ReserveVT='
+        line: 'ReserveVT=6'
+    - name: 'kernel cmdline'
+      copy:
+        src: files/cmdline.txt
+        dest: /boot/cmdline.txt
+    - name: 'firewall config'
+      copy:
+        src: files/iptables.rules
+        dest: /etc/iptables/iptables.rules
+    - name: 'iptables service'
+      systemd:
+        unit: iptables.service
+        enabled: yes
+        state: started

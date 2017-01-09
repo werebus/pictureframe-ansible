@@ -5,13 +5,6 @@
   become_method: su
   gather_facts: no
 
-  vars:
-    admin_user: 'matt'
-
-  vars_prompt:
-    - name: 'admin_user_password'
-      prompt: 'Enter password for admin user'
-
   tasks:
     - name: 'install python'
       raw: 'pacman -S --needed --noconfirm --noprogressbar python'
