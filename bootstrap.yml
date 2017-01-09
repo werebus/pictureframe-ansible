@@ -7,19 +7,17 @@
 
   tasks:
     - name: 'install python'
-      raw: 'pacman -S --needed --noconfirm --noprogressbar python'
+      raw: 'pacman -Sy --needed --noconfirm --noprogressbar python'
     - user:
         name: '{{ admin_user }}'
         append: yes
         groups: wheel
-        password: "{{ admin_user_password|password_hash('sha512') }}"
     - authorized_key:
         user: '{{ admin_user }}'
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     - name: 'install sudo'
       pacman:
         name: sudo
-        update_cache: yes
     - name: 'sudoers file'
       lineinfile:
         dest: /etc/sudoers

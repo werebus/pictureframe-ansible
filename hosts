@@ -1,6 +1,6 @@
 [local]
-localhost ansible_connection=local
+localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python2
 
 [frames]
 #frame.werebus
-192.168.33.138
+128.119.98.97
