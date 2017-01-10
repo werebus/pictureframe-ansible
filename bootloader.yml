@@ -1,0 +1,8 @@
+- name: 'kernel cmdline'
+  copy:
+    src: files/cmdline.txt
+    dest: /boot/cmdline.txt
+- name: 'bootloader config'
+  copy:
+    src: files/config.txt
+    dest: /boot/config.txt

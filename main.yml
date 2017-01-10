@@ -4,19 +4,8 @@
   become: yes
 
   tasks:
-    - name: 'remove alarm user'
-      user:
-        name: alarm
-        state: absent
-        remove: yes
-    - name: 'lock root user'
-      user:
-        name: root
-        expires: 1
-    - name: 'kernel cmdline'
-      copy:
-        src: files/cmdline.txt
-        dest: /boot/cmdline.txt
-    - include: 'ttys.yml'
-    - include: 'firewall.yml'
-    #- include: 'wireless.yml'
+    - include: users.yml
+    - include: bootloader.yml
+    - include: ttys.yml
+    - include: firewall.yml
+    #- include: wireless.yml

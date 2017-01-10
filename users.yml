@@ -1,0 +1,9 @@
+- name: 'remove alarm user'
+  user:
+    name: alarm
+    state: absent
+    remove: yes
+- name: 'lock root user'
+  user:
+    name: root
+    expires: 1
