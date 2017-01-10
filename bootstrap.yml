@@ -24,3 +24,4 @@
         state: present
         insertafter: '^# ?%wheel'
         line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
