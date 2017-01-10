@@ -3,3 +3,4 @@
 gpu_mem=64
 disable_splash=1
 boot_delay=0
+dtoverlay=pi3-disable-bt
