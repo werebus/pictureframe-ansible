@@ -7,8 +7,16 @@
     state: directory
 - name: 'splash image'
   copy:
-    src: files/splash.fb
-    dest: /images/splash.fb
+    src: files/splash.jpg
+    dest: /images/splash.jpg
+- name: 'display splash'
+  command: '/usr/bin/fbv -e /images/splash.jpg'
+  args:
+    creates: /images/splash.fb #Not really, but don't bother if it's there
+- name: 'capture splash'
+  command: 'cp /dev/fb0 /images/splash.fb'
+  args:
+    creates: /images/splash.fb
 - name: 'splash service file'
   copy:
     src: files/simple-splash.service
