@@ -6,4 +6,4 @@
 - name: 'lock root user'
   user:
     name: root
-    expires: 1
+    password: x
