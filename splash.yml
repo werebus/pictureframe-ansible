@@ -1,0 +1,20 @@
+- name: 'fbv'
+  pacman:
+    name: fbv
+- name: 'images directory'
+  file:
+    path: /images
+    state: directory
+- name: 'splash image'
+  copy:
+    src: files/splash.fb
+    dest: /images/splash.fb
+- name: 'splash service file'
+  copy:
+    src: files/simple-splash.service
+    dest: /etc/systemd/system/simple-splash.service
+- name: 'splash service'
+  systemd:
+    unit: simple-splash.service
+    enabled: yes
+    daemon_reload: yes

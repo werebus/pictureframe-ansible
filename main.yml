@@ -11,3 +11,4 @@
     - include: firewall.yml
     - include: wireless.yml
       when: 'wl_interface in ansible_interfaces'
+    - include: splash.yml

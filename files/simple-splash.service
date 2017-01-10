@@ -1,0 +1,12 @@
+[Unit]
+Description=Simple FB image spash-screen
+DefaultDependencies=No
+After=sysinit.target local-fs.target
+Before=basic.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cp /images/splash.fb /dev/fb0
+
+[Install]
+WantedBy=basic.target
