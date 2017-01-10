@@ -4,11 +4,11 @@
   become: yes
 
   tasks:
-    - include: users.yml
-    - include: bootloader.yml
-    - include: ttys.yml
-    - include: misc_packages.yml
-    - include: firewall.yml
-    - include: wireless.yml
+    - include: tasks/users.yml
+    - include: tasks/bootloader.yml
+    - include: tasks/ttys.yml
+    - include: tasks/misc_packages.yml
+    - include: tasks/firewall.yml
+    - include: tasks/wireless.yml
       when: 'wl_interface in ansible_interfaces'
-    - include: splash.yml
+    - include: tasks/splash.yml
