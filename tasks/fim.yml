@@ -1,9 +1,10 @@
-- name: 'base devel'
+- name: 'fim prerequisites'
   pacman:
-    name: base-devel
-- name: 'netcat'
-  pacman:
-    name: openbsd-netcat
+    name: '{{ item }}'
+  with_items:
+    - base-devel
+    - openbsd-netcat
+    - libpng
 - name: 'aur directory'
   file:
     path: '/home/{{ admin_user }}/aur'
