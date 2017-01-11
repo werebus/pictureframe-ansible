@@ -1,0 +1,46 @@
+# Maintainer: Steven Honeyman <stevenhoneyman at gmail com>
+# Contributor: Alexej Magura <agm2819*gmail*>
+# Contributor: Dragonlord <dragonlord[at]seznam[.]cz>
+# Contributor: daniel <quite a hack org>
+
+pkgname=fim
+_pkgname='rc2'
+pkgver=0.5
+pkgrel=1
+pkgdesc="Highly customizable and scriptable framebuffer image viewer based on fbi."
+arch=('i686' 'x86_64' 'armv6h' 'armv7h')
+conflicts=('fim-svn')
+url="http://www.nongnu.org/fbi-improved/"
+license=('GPL')
+optdepends=('djvulibre: djvu support'
+            'libspectre: postscript support'
+            'sdl: X support'
+            'poppler: PDF support')
+depends=('giflib' 'libjpeg-turbo' 'libexif')
+
+# It doesn't like to be parallel built
+#options=(!makeflags)
+#install=install
+source=("http://download.savannah.gnu.org/releases/fbi-improved/$pkgname-$pkgver-${_pkgname}.tar.bz2"
+        "fix-sdl-device-name.patch")
+md5sums=('01333ce38f1eacd60ad668a2ca38ac7e'
+         'b60a6579787f703914590a587d9b80b4')
+
+prepare() {
+  cd "$srcdir/$pkgname-$pkgver-$_pkgname"
+  patch -p1 -i ${srcdir}/fix-sdl-device-name.patch
+}
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver-$_pkgname"
+  ./configure --prefix=/usr --disable-debug --enable-unicode \
+              --enable-hardcoded-font --with-default-consolefont='fim://' \
+              --enable-recursive-dirs --disable-xcftopnm --disable-inkscape \
+              --disable-xfig --disable-dia --disable-imlib2 --disable-as-text-rendering
+  #find -name 'Makefile.in' -exec sed -i -e '/LEXLIB/d' {} \;
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver-$_pkgname"
+  make DESTDIR=$pkgdir install
+}

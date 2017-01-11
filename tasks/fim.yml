@@ -1,0 +1,37 @@
+- name: 'base devel'
+  pacman:
+    name: base-devel
+- name: 'aur directory'
+  file:
+    path: '/home/{{ admin_user }}/aur'
+    state: directory
+    owner: '{{ admin_user }}'
+- name: 'fim package files'
+  copy:
+    src: files/fim
+    dest: '/home/{{ admin_user }}/aur'
+    owner: '{{ admin_user }}'
+- name: 'check fim installation'
+  command: 'pacman -Q fim'
+  register: fim_check_result
+  ignore_errors: true
+- name: 'build fim'
+  shell: 'PKGEXT=".pkg.tar" makepkg -csi --noconfirm --needed --noprogressbar'
+  args:
+    chdir: '/home/{{ admin_user }}/aur/fim'
+  become: false
+  when: fim_check_result.rc!=0
+- name: 'fimrc file'
+  copy:
+    src: files/fimrc
+    dest: /etc/fimrc
+- name: 'fim service file'
+  copy:
+    src: files/fim.service
+    dest: /etc/systemd/system/fim.service
+- name: 'fim service'
+  systemd:
+    unit: fim.service
+    enabled: yes
+    state: started
+    daemon_reload: yes

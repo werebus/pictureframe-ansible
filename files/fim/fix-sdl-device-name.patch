@@ -1,0 +1,12 @@
+diff -aur fim-0.5-rc2.pristine/src/CommandConsole-init.cpp fim-0.5-rc2.new/src/CommandConsole-init.cpp
+--- fim-0.5-rc2.pristine/src/CommandConsole-init.cpp	2016-12-08 02:40:07.533617905 +0000
++++ fim-0.5-rc2.new/src/CommandConsole-init.cpp	2016-12-08 02:40:14.643551627 +0000
+@@ -255,7 +255,7 @@
+ 					|| device==FIM_DDN_INN_AA
+ 		#endif /* FIM_WITH_AALIB */
+ 		#ifndef FIM_WITH_LIBSDL
+-					|| device==FIM_WITH_LIBSDL
++					|| device==FIM_DDN_INN_SDL
+ 		#endif /* FIM_WITH_LIBSDL */
+ 		#ifdef FIM_WITH_NO_FRAMEBUFFER
+ 					|| device==FIM_DDN_INN_FB

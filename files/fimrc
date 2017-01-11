@@ -1,0 +1,117 @@
+# Read the documentation (man fimrc) to discover how to change this default hardcoded file and how to make your own.
+# Note that usually a ~/.fimrc file is read after these options take effect, so you could reset all of this with ease.
+# Lines beginning with a pound (#) are ignored by fim (they are treated as comments).
+#
+# Internal variables.
+# Some of these variables influence Fim's behaviour (input variables), some are set by Fim (output variables).
+# It is wise the input variables are set at the beginning of the file, so the bottom may issue commands correctly affected by them.
+if(_debug_commands==''){_debug_commands=0;}
+if(_command_expansion==''){_command_expansion=1;}
+if(_display_status==''){_display_status=0;}
+if(_max_cached_images==''){_max_cached_images=5;}
+if(_max_cached_memory==''){_max_cached_memory=81920;}
+if(_max_iterated_commands==''){_max_iterated_commands=100;}
+if(_want_prefetch==''){_want_prefetch=1;}
+if(_no_external_loader_programs==''){_no_external_loader_programs=0;}
+if(_scale_style==''){_scale_style='a';}
+if(_save_fim_history==''){_save_fim_history=1;}
+if(_load_fim_history==''){_load_fim_history=1;}
+if(_verbose_keys==''){_verbose_keys=0;}
+if(_display_busy==''){_display_busy=1;}
+if(_ignorecase==''){_ignorecase=1;}
+if(_re_search_opts==''){_re_search_opts='bi';}
+if(_console_offset==''){_console_offset=0;}
+if(_console_key==''){_console_key=58;}
+if(_display_as_binary==''){_display_as_binary=0;}
+if(_push_checks==''){_push_checks=1;}
+#if(_want_wm_caption_status==''){_want_wm_caption_status=0;}
+if(_want_exif_orientation==''){_want_exif_orientation=1;}
+if(ascale==''){ascale="1.0";}
+if(_use_mipmaps==''){_use_mipmaps=1;}
+ 
+alias "toggleautoflip" "_autoflip=1-_autoflip;" "";
+alias "toggleautonegate" "_autonegate=1-_autonegate;" "";
+alias "toggleflip" "i:flipped=1-i:flipped;" "";
+alias "flip" "toggleflip;redisplay;" "flip the current image along the horizontal axis";
+alias "fliponce" "flip;toggleflip;" "";
+alias "toggleautomirror" "_automirror=1-_automirror;" "";
+alias "togglemirror" "i:mirrored=1-i:mirrored;" "";
+alias "mirror" "togglemirror;redisplay;" "mirror the image along the vertical axis" "";
+alias "mirroronce" "mirror;togglemirror;" "";
+alias 'toggleLimitMarked' '__pre_limit_fileindex=_fileindex;_limit_mode=1-_limit_mode; if(_limit_mode==1){limit "!";} else { limit; } if(_filelistlen<1){_limit_mode=0;limit;goto __pre_limit_fileindex;} i:fresh=1;redisplay; ' "toggle between limiting file list to the marked files and the full list";
+bind 'Esc' "quit";
+alias "toggleVerbosity" "_display_console=1-_display_console;i:fresh=1;redisplay;" "";
+alias "toggleKeyVerbosity" "_verbose_keys=1-_verbose_keys;redisplay;" "";
+alias "idempotent_cmd" "goto '+0p';";
+#
+# autocommands are essential to Fim's automated behaviour
+autocmd "PostGoto" "" "reload;";
+autocmd "PostWindow"   "" "display;";
+autocmd "PreRedisplay"   "" "i:_will_display=1;";
+autocmd "PreRedisplay"   "" "if(_scale_style!='' && i:fresh){i:fresh=0;scale _scale_style ;i:fresh=0;}";
+autocmd "PostRedisplay" ""   "i:_will_display=0;";
+autocmd "PostReload"  "" "i:fresh=1" ;
+autocmd "PostScale"   "" "if(0==i:_will_display){i:fresh=1;display;}" ;
+autocmd "PostPan"     "" "{i:fresh=1;display;}" ;
+autocmd "PostReload"   "" "if(i:fresh){redisplay;}";
+
+alias "endless_slideshow" "while(1){display;sleep '1';next;};" "performs an automated slideshow, endlessly";
+alias "random_slideshow" "while(1){goto random;}" "performs a shuffled slideshow";
+autocmd "PreExecutionCycle" "" "i:fresh=1;reload;";
+
+alias "pan_nw" "pan 'nw';" "pans the image to the upper left";
+alias "pan_ne" "pan 'ne';" "pans the image to the upper right";
+alias "pan_se" "pan 'se';" "pans the image to the lower left";
+alias "pan_sw" "pan 'sw';" "pans the image to the lower right";
+alias "pan_down" "pan 'down';" "pans the image down";
+alias "pan_up" "pan 'up';" "pans the image up";
+alias "pan_left" "pan 'left';" "pans the image left";
+alias "pan_right" "pan 'right';" "pans the image right";
+
+alias "diagonal_nw" "pan_nw;" "pans the image to the upper left";
+alias "diagonal_ne" "pan_ne;" "pans the image to the upper right";
+alias "diagonal_se" "pan_se;" "pans the image to the lower left";
+alias "diagonal_sw" "pan_sw;" "pans the image to the lower right";
+alias "sort" "list 'sort'" "sorts the files list ordered";
+alias "rotate90_ccw" "i:_orientation=i:_orientation+3;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate90_cw"  "i:_orientation=i:_orientation+1;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate180"  "i:_orientation=i:_orientation+2;i:fresh=1;i:fresh=1;redisplay;" "";
+alias "rotate90" "rotate90_cw;display;" "";
+alias "rotate270" "rotate90_ccw;display;" "";
+alias "rotate10"     "rotate  '10';display;" "";
+alias "rotate10_ccw" "rotate -10;display;" "";
+alias "toggleDisplayStatus" "_display_status=1-_display_status;" "";
+alias "toggleDisplayBusy" "_display_busy=1-_display_busy;" "";
+
+alias 'cache' 'echo _cache_status;' "displays cached images status";
+
+alias 'widen'  'i:ascale=i:ascale*"1.1";*1.0;' "widen the current image";
+alias 'narrow' 'i:ascale=i:ascale/"1.1";*1.0;' "narrow the current image";
+alias 'contract' 'narrow';
+
+alias 'console_scroll_up' 'if(_console_offset<_console_lines+console_scroll_n-_rows){_console_offset=_console_offset+console_scroll_n;}';
+alias 'console_scroll_down' 'if(allow_round_scroll || (_console_offset>=console_scroll_n)){_console_offset=_console_offset-console_scroll_n;}';
+alias 'console_scroll_reset' '{_console_offset=0;}';
+alias 'scu'   'console_scroll_up;'   "";
+alias 'scd'   'console_scroll_down;' "";
+alias 'scz'   'console_scroll_reset;' "";
+alias 'center'   'align "center"';
+alias 'left'   'align "left"';
+alias 'right'  'align "right"';
+alias 'top'   'align "top"';
+alias 'bottom'   'align "bottom"';
+
+_scale_style='a';
+_want_wm_caption_status="fim:%N@%p%%%L[%i/%l]";
+_info_fmt_str="%p%% %wx%h%L %i/%l%P %F %T %c";
+_display_status_fmt="%N%?EXIF_DateTimeOriginal?[%:EXIF_DateTimeOriginal:]?%?EXIF_ExposureTime?[%:EXIF_ExposureTime:]?%?EXIF_FNumber?[%:EXIF_FNumber:]?%?EXIF_ApertureValue?[%:EXIF_ApertureValue:]?%?EXIF_ISOSpeedRatings?[ISO%:EXIF_ISOSpeedRatings:]?:%k";
+_display_status=0;
+_display_busy=0;
+
+echo "WELCOME : to switch to the command line interface press ':' ";
+
+alias "plisten" 'popen "nc -l 0.0.0.0 9999 "' "executes fim commands coming from port 9999 on this computer";
+alias "wlisten" "while(1){sleep;plisten;}" "listen to a pipe, endlessly";
+
+wlisten;
+
