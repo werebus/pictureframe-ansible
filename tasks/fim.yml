@@ -1,6 +1,9 @@
 - name: 'base devel'
   pacman:
     name: base-devel
+- name: 'netcat'
+  pacman:
+    name: openbsd-netcat
 - name: 'aur directory'
   file:
     path: '/home/{{ admin_user }}/aur'
