@@ -1,3 +1,13 @@
+- name: 'fb width'
+  shell: "cat /sys/class/graphics/fb0/virtual_size | cut -f 1 -d ','"
+  register: fb_width
+- name: 'fb height'
+  shell: "cat /sys/class/graphics/fb0/virtual_size | cut -f 2 -d ','"
+  register: fb_height
+- name: 'fb depth'
+  shell: "cat /sys/class/graphics/fb0/bits_per_pixel"
+  register: fb_depth
+
 - name: 'fim prerequisites'
   pacman:
     name: '{{ item }}'
@@ -5,6 +15,7 @@
     - base-devel
     - openbsd-netcat
     - libpng
+
 - name: 'aur directory'
   file:
     path: '/home/{{ admin_user }}/aur'
@@ -25,13 +36,14 @@
     chdir: '/home/{{ admin_user }}/aur/fim'
   become: false
   when: fim_check_result.rc!=0
+
 - name: 'fimrc file'
   copy:
     src: files/fimrc
     dest: /etc/fimrc
 - name: 'fim service file'
-  copy:
-    src: files/fim.service
+  template:
+    src: templates/fim.service.j2
     dest: /etc/systemd/system/fim.service
 - name: 'fim service'
   systemd:

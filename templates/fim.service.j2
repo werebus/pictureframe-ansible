@@ -1,0 +1,13 @@
+[Unit]
+Description=Fim image viewer
+After=network.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/bin/dd if=/dev/zero of=/dev/fb0 bs={{ fb_width.stdout|int * fb_height.stdout|int * fb_depth.stdout|int // 8 }} count=1
+ExecStart=/usr/bin/fim -c \';\' -f /etc/fimrc -d /dev/fb0
+ExecStopPost=/usr/bin/dd if=/dev/zero of=/dev/fb0 bs={{ fb_width.stdout|int * fb_height.stdout|int * fb_depth.stdout|int // 8 }} count=1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
