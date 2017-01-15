@@ -13,3 +13,7 @@
       when: 'wl_interface in ansible_interfaces'
     - include: tasks/splash.yml
     - include: tasks/fim.yml
+    - include: tasks/nginx-base.yml
+
+  handlers:
+    - include: handlers/nginx.yml
